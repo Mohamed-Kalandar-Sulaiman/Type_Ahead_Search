@@ -23,7 +23,7 @@ searchRouter.add_api_websocket_route(path       = "/typeahead",
 
 searchRouter.add_api_route(path              = "/",
                            response_class         = JSONResponse,
-                           response_model         = List[SearchResponse],
+                           response_model         = SearchResponse,
                            status_code            = 202,
                            methods                = ["GET"],
                            description            = "REST API endponit to handle detailed search results.",

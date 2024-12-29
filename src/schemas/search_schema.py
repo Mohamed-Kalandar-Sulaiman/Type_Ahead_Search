@@ -10,9 +10,6 @@ class SearchRequest(BaseModel):
 
 
 
-
-
-
 class SearchResponse(BaseModel): 
       history                  : Optional[List[str]] = Field(default=["golang", "python", "docker"], description="Results from search history")
       fuzzy                    : Optional[List[str]] = Field(default=None, description="Fuzzy results based on search query")
