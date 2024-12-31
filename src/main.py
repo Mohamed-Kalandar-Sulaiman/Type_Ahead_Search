@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
+from src.database import ElasticsearchClient
+
 from src.repository import *
 from src.routers.search_router import searchRouter
 from src.middlewares import AuthMiddleware, LoggingMiddleware, CorsMiddleware
@@ -13,16 +15,16 @@ async def lifespan(app: FastAPI):
     ENV_FILE_PATH = Path(__file__).resolve().parent.parent /  ".env"
     print(ENV_FILE_PATH)
     load_dotenv(dotenv_path=ENV_FILE_PATH)
-    kafka_broker       = os.getenv("KAFKA_BROKER")
-    elasticsearch_host = os.getenv("ELASTICSEARCH_HOjST")
+    ES_HOST = os.getenv("ES_HOST")
+    ES_PORT = os.getenv("ES_PORT")
     
-    print(f"Kafka Broker: {kafka_broker}")
-    print(f"Elasticsearch Host: {elasticsearch_host}")
-
+    print(f"Elasticsearch Host: {ES_HOST} {ES_PORT}")
+    es = ElasticsearchClient()
+    await es.check_connection()
     yield
     
     print("Shutdown: Cleaning up resources if necessary")
-
+    es.close()
 
 
 app = FastAPI(title="TypeAheadSearch", version="1.0.0",lifespan=lifespan)

@@ -152,8 +152,27 @@ class ElasticsearchQueryBuilder:
             "ids": {"values": [doc_id]}
         }
         return self
+
+
+    def add_source(self, fields:list):
+        self.query["_source"] = fields
+        return self
+    
+    def add_size(self, size:int):
+        self.query["size"] = size
+        return self
+    
+    def add_sort(self, field:str, order:str):
+        self.query["sort"] = [] if "sort" not in self.query else self.query["sort"]
+        self.query["sort"].append(
+                                    {field:{
+                                        "order":order
+                                    }}
+                                )
+        return self
+
     
     # Build the final query
     def build(self)->dict:
-        return {self.query}
+        return self.query
 

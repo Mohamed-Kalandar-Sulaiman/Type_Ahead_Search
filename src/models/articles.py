@@ -3,22 +3,36 @@ from typing import Optional,List
 
 
 class Article(BaseModel): 
-    id                : int
+    id                : str
     title             : str
-    content           : str
+    tags              : List[str]
+    created_on        : str
     author_id         : str
-    publication_id    : str
-
+    publication_id    : Optional [str]= None
+    likes             : int
+    dislikes          : int
+ 
 
 class Person(BaseModel): 
-    id               : int
+    id               : str
     name             : str
     writes_about     : List[str]
-    bio              : Optional[str] = None
+    followers        : int
 
 
-class Publication(BaseModel):
-    id: int
-    name: str
-    description: Optional[str] = None
+class Publication(BaseModel): 
+    id                    : str
+    name                  : str
+    tags                  : List[str]
+    description           : Optional[str] = None
+    subscribers           : int
+    authors               : List[str]
+      
+    
+class History(BaseModel): 
+    id     : str
+    prefix : str
+    user_id: str
+    date   : str
+    
     

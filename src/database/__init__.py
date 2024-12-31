@@ -1,2 +1,2 @@
-from .elastic_search import Elasticsearch
+from .elastic_search import  ElasticsearchClient
 
