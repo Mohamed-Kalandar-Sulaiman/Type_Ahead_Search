@@ -1,0 +1,7 @@
+elasticsearch==8.17.0
+fastapi==0.115.6
+pydantic==2.10.4
+python-dotenv==1.0.1
+python_jose==3.3.0
+starlette==0.45.1
+ulid==1.1
