@@ -14,6 +14,8 @@ import datetime
 
 from src.database import ElasticsearchClient
 from src.repository import *
+from src.utilities import Logger
+logger = Logger(name=__name__)
 
 
 
@@ -46,7 +48,7 @@ async def staticSearchHandler(request:Request):
     request_payload      = await request.json()
     request_query_params = dict(request.query_params)
     prefix               = request_payload.get("prefix")
-    print(f"Static search request recieved {prefix}")
+    logger.debug(f"Static search request recieved {prefix}")
 
     userId = request.state.userId
     

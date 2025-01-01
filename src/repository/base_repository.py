@@ -3,7 +3,7 @@ import json
 
 
 from src.utilities import Logger
-logger = Logger(name=__name__, log_level="DEBUG")
+logger = Logger(name=__name__)
 
 class BaseRepository():
     def __init__(self):

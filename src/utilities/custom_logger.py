@@ -26,7 +26,7 @@ class Logger:
     def _add_colored_stream_handler(self):
         """Add a StreamHandler with colored output to the console."""
         # Install coloredlogs for console output
-        coloredlogs.install(level=logging.DEBUG, logger=self.logger, fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        coloredlogs.install(level=logging.DEBUG, fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     def debug(self, message: str):
         self.logger.debug(message)

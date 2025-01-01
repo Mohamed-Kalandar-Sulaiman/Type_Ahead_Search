@@ -7,6 +7,8 @@ from src.schemas.search_schema import SearchRequest
 from src.repository import ArticlesRepository, AuthorsRepository, PublicationsRepository, HistoryRepository
 from src.utilities import WebSocketAuthMiddleware
 
+from src.utilities import Logger
+logger = Logger(name=__name__)
 
 
 articles_repo    = ArticlesRepository()
@@ -80,7 +82,7 @@ async def typeAheadSearchHandler(websocket: WebSocket):
     #! Autheticate user 
     try:
         userId = await WebSocketAuthMiddleware(websocket=websocket)
-        print(f"Authenticated userId: {userId}")
+        logger.debug(f"Authenticated userId: {userId}")
     except WebSocketDisconnect as e:
         await websocket.send_json({"error": str(e)})
         await websocket.close(code=1002, reason=str(e))  
@@ -94,7 +96,7 @@ async def typeAheadSearchHandler(websocket: WebSocket):
             try:
                 data   = await websocket.receive_json()
                 prefix = data.get("prefix")
-                print(f"Search term -  `{prefix}` is recieved from {userId}")
+                logger.debug(f"Search term -  `{prefix}` is recieved from {userId}")
                 
                 #! Rate limit here and check ES
                 
@@ -105,19 +107,19 @@ async def typeAheadSearchHandler(websocket: WebSocket):
                 await websocket.send_json(data = response)
             
             except WebSocketDisconnect:
-                print(f"Client disconnected during data reception")
+                logger.debug(f"Client disconnected during data reception")
                 break
             except Exception as e:
-                print(f"Error processing request: {e}")
+                logger.debug(f"Error processing request: {e}")
                 if websocket.client_state == WebSocketState.CONNECTED:
                     await websocket.send_json({"error": "Some error occurred. Please try again."})
                 
             
     except WebSocketDisconnect:
-        print(f"Client disconnected")
+        logger.debug(f"Client disconnected")
         
     finally:
         if websocket.client_state == WebSocketState.CONNECTED:
             await websocket.close()
-            print(f"Connection closed for userId: {userId}")
+            logger.debug(f"Connection closed for userId: {userId}")
 

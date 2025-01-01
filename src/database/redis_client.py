@@ -2,6 +2,8 @@ import os
 import aioredis
 from fastapi import HTTPException
 from typing import Any
+from src.utilities import Logger
+logger = Logger(name=__name__)
 
 
 class RedisClient:
@@ -27,9 +29,9 @@ class RedisClient:
                 # Using from_url method instead of deprecated create_redis_pool
                 redis_url = f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
                 self.client = await aioredis.from_url(redis_url)
-                print("Initialized Redis client.")
+                logger.info("Initialized Redis client.")
             except Exception as e:
-                print(f"Error initializing Redis client: {e}")
+                logger.critical(f"Error initializing Redis client: {e}")
                 raise HTTPException(status_code=500, detail=f"Error initializing Redis client: {str(e)}")
 
     async def close(self):
@@ -38,7 +40,7 @@ class RedisClient:
             try:
                 await self.client.close()  # Close the connection properly
             except Exception as e:
-                print(f"Error occurred while closing connection: {e}")
+                logger.critical(f"Error occurred while closing connection: {e}")
 
     async def check_connection(self):
         """Ping the Redis server to ensure the connection is alive."""
@@ -48,9 +50,9 @@ class RedisClient:
             pong = await self.client.ping()
             if not pong:
                 raise Exception("Redis ping failed.")
-            print("Redis ping successful.")
+            logger.info("Redis ping successful.")
         except Exception as e:
-            print(f"Error pinging Redis: {e}")
+            logger.critical(f"Error pinging Redis: {e}")
             raise HTTPException(status_code=500, detail=f"Error pinging Redis: {str(e)}")
 
     async def set_value(self, key: str, value: Any, ttl: int = None) -> bool:

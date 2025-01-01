@@ -2,7 +2,8 @@ import os
 from elasticsearch import AsyncElasticsearch, NotFoundError, ConnectionError as ESConnectionError
 from fastapi import HTTPException
 from typing import Dict, Any
-
+from src.utilities import Logger
+logger = Logger(name=__name__)
 
 class ElasticsearchClient:
     _instance = None
@@ -32,15 +33,15 @@ class ElasticsearchClient:
                 retry_on_timeout=True,
                 timeout=10,
             )
-            print("Initialized AsyncElasticsearch client.")
+            logger.info("Initialized AsyncElasticsearch client.")
         except Exception as e:
-            print(f"Error initializing Elasticsearch client: {e}")
+            logger.error(f"Error initializing Elasticsearch client: {e}")
             raise HTTPException(status_code=500, detail=f"Error initializing Elasticsearch client: {str(e)}")
     def close(self):
         try:
             self.client.close()
         except Exception as e:
-            print(f"Error occured while closing connection {e}")
+            logger.critical(f"Error occured while closing connection {e}")
             
 
     async def check_connection(self):
@@ -48,9 +49,9 @@ class ElasticsearchClient:
         try:
             if not await self.client.ping():
                 raise ESConnectionError("Elasticsearch ping failed.")
-            print("Elasticsearch ping successful.")
+            logger.info("Elasticsearch ping successful.")
         except Exception as e:
-            print(f"Error pinging Elasticsearch: {e}")
+            logger.critical(f"Error pinging Elasticsearch: {e}")
             raise HTTPException(status_code=500, detail=f"Error pinging Elasticsearch: {str(e)}")
 
     async def index_document(self, index: str, doc_id: str, document: Dict[str, Any]) -> Dict[str, Any]:
