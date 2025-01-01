@@ -4,8 +4,8 @@ from src.database import ElasticsearchClient
 
 
 class HistoryRepository:
-    def __init__(self, es_client:ElasticsearchClient):
-        self.es_client = es_client
+    def __init__(self):
+        self.es_client = ElasticsearchClient()
         self.index     = "search_history"
 
     async def search_latest_history(self, userId)->list:

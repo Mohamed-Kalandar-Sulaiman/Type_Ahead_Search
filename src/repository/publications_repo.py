@@ -4,8 +4,8 @@ from src.database import ElasticsearchClient
 
 
 class PublicationsRepository:
-    def __init__(self, es_client:ElasticsearchClient):
-        self.es_client = es_client
+    def __init__(self):
+        self.es_client = ElasticsearchClient()
         self.index     = "publications"
 
     async def search_publications_by_name(self, prefix)->list:

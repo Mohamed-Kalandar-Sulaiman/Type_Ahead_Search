@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
-from src.database import ElasticsearchClient
+from src.database import ElasticsearchClient, RedisClient
+
 
 from src.repository import *
 from src.routers.search_router import searchRouter
@@ -15,14 +16,12 @@ from src.middlewares import AuthMiddleware, LoggingMiddleware, CorsMiddleware
 
 async def lifespan(app: FastAPI):
     ENV_FILE_PATH = Path(__file__).resolve().parent.parent /  ".env"
-    print(ENV_FILE_PATH)
     load_dotenv(dotenv_path=ENV_FILE_PATH)
-    ES_HOST = os.getenv("ES_HOST")
-    ES_PORT = os.getenv("ES_PORT")
     
-    print(f"Elasticsearch Host: {ES_HOST} {ES_PORT}")
     es = ElasticsearchClient()
     await es.check_connection()
+    redis = RedisClient()
+    await redis.check_connection()
     yield
     
     print("Shutdown: Cleaning up resources if necessary")

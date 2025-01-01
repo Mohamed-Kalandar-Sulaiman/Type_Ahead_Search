@@ -4,17 +4,15 @@ from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.websockets import WebSocketState
 from src.schemas.search_schema import SearchRequest
 
-from src.database import ElasticsearchClient
 from src.repository import ArticlesRepository, AuthorsRepository, PublicationsRepository, HistoryRepository
 from src.utilities import WebSocketAuthMiddleware
 
 
 
-es_client        = ElasticsearchClient()
-articles_repo    = ArticlesRepository(es_client = es_client)
-authors_repo     = AuthorsRepository(es_client  = es_client)
-publictaions_reo = PublicationsRepository(es_client=es_client)
-history_repo     = HistoryRepository(es_client = es_client)
+articles_repo    = ArticlesRepository()
+authors_repo     = AuthorsRepository()
+publictaions_reo = PublicationsRepository()
+history_repo     = HistoryRepository()
 
 
 def flatten_and_clean_data(data):

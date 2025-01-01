@@ -4,8 +4,8 @@ from src.database import ElasticsearchClient
 
 
 class AuthorsRepository:
-    def __init__(self, es_client:ElasticsearchClient):
-        self.es_client = es_client
+    def __init__(self):
+        self.es_client = ElasticsearchClient()
         self.index     = "authors"
 
     async def search_authors_by_name(self, prefix)->list:

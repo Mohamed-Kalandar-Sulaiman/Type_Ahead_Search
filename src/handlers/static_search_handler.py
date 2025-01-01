@@ -18,7 +18,7 @@ from src.repository import *
 
 
 es_client    = ElasticsearchClient()
-history_repo = HistoryRepository(es_client = es_client)
+history_repo = HistoryRepository()
 
 
 async def LogHistory(request:Request, prefix ):
