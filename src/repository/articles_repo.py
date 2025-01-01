@@ -4,45 +4,28 @@ import json
 import asyncio
 
 from src.utilities import ElasticsearchQueryBuilder
-from src.database import ElasticsearchClient, RedisClient
+from src.database import ElasticsearchClient
 
 
-class ArticlesRepository:
+from .base_repository import BaseRepository
+
+
+class ArticlesRepository(BaseRepository):
     def __init__(self):
+        super().__init__()
         self.es_client    = ElasticsearchClient()
-        self.redis_client = RedisClient()
         self.index        = "articles"
         
-    async def read_from_cache(self,key):
-        key = self.index + key
-        try:
-            response = await self.redis_client.get_value(key=key)
-            if response is not None: 
-                print(f"CACHE HIT {key} ")
-                return json.loads(response), True
-            else:
-                print(f"CACHE MISS {key} ")
-                return None, False
-        except Exception as e:
-            return None , False
-        
-    async def write_back_into_cache(self,key, value, ttl=None)->None:
-        key = self.index + key
-        try:
-            value    = json.dumps(value)
-            await self.redis_client.set_value(key=key, value=value, ttl=60)
-            print(f"Wriiten into redis ->  {key}")
-        except Exception as e:
-            return 
+    
         
 
     async def search_articles_on_title(self, prefix)->list:
-        #! Try getting from redis
-        key = f":search_articles_on_title:{prefix}"
+        #! Check from cache
+        key = f"{self.index}:search_articles_on_title:{prefix}"
         response ,    isCached = await self.read_from_cache(key=key)
         if isCached:
             return response
-        
+        #! Cache miss > Query ES
         query   = ElasticsearchQueryBuilder()
         query.add_match(field="title", value=prefix)
         query.add_source(fields=["id", "title", "tags"])
@@ -58,10 +41,12 @@ class ArticlesRepository:
     
     
     async def search_articles_by_fuzzy(self,prefix):
-        key = f":search_articles_by_fuzzy:{prefix}"
+        #! Check from cache
+        key = f"{self.index}:search_articles_by_fuzzy:{prefix}"
         response ,    isCached = await self.read_from_cache(key=key)
         if isCached:
             return response
+        #! Cache miss > Query ES
         query   = ElasticsearchQueryBuilder()
         query.add_fuzzy(field="title", value=prefix, fuzziness= 0.5)
         query.add_source(fields=["id", "title", "tags"])
@@ -75,10 +60,12 @@ class ArticlesRepository:
             return []
     
     async def search_articles_by_prefix(self,prefix):
-        key = f":search_articles_by_prefix:{prefix}"
+        #! Check from cache
+        key = f"{self.index}:search_articles_by_prefix:{prefix}"
         response ,    isCached = await self.read_from_cache(key=key)
         if isCached:
             return response
+        #! Cache miss > Query ES
         query   = ElasticsearchQueryBuilder()
         query.add_prefix(field="title", value=prefix)
         query.add_source(fields=["id", "title", "tags"])
@@ -93,10 +80,12 @@ class ArticlesRepository:
         
         
     async def search_articles_on_tags(self,prefix):
-        key = f":search_articles_on_tags:{prefix}"
+        #! Check from cache
+        key = f"{self.index}:search_articles_on_tags:{prefix}"
         response ,    isCached = await self.read_from_cache(key=key)
         if isCached:
             return response
+        #! Cache miss > Query ES
         query   = ElasticsearchQueryBuilder()
         query.add_term(field="tags", value=prefix)
         query.add_source(fields=["id", "title", "tags"])
@@ -111,10 +100,12 @@ class ArticlesRepository:
             return []
         
     async def suggestion(self,prefix):
-        key = f":suggestion:{prefix}"
+        #! Check from cache
+        key = f"{self.index}:suggestion:{prefix}"
         response ,    isCached = await self.read_from_cache(key=key)
         if isCached:
             return response
+        #! Cache miss > Query ES
         try:
             query = {
                 "suggest":{
