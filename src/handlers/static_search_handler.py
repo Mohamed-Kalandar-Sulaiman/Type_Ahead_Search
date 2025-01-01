@@ -1,5 +1,6 @@
 import ulid 
 import time
+import asyncio
 from fastapi.responses import JSONResponse
 from fastapi import Response, Request, HTTPException
 from fastapi import Path,Query
@@ -50,8 +51,9 @@ async def staticSearchHandler(request:Request):
     #! Fetch data
     response = history_repo.search_latest_history(userId=None)
     #! Write into history cluster and analytics service topic
-    LogHistory(request=request, prefix=prefix)
-    AnalyticsService(prefix)
+    asyncio.create_task(LogHistory(request=request, prefix=prefix))
+    asyncio.create_task(AnalyticsService(prefix))
+    
     return JSONResponse(status_code=200,
                         content=response)
 

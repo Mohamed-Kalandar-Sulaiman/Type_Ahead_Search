@@ -20,6 +20,9 @@ async def WebSocketAuthMiddleware(websocket:WebSocket):
     try:
         token = websocket.headers.get("Authorization")
         if token is None:
+            token = websocket.query_params.get("Authorization")
+        
+        if token is None:
             raise WebSocketDisconnect("Authorization token not provided")
         token = token.split(" ")[1] if " " in token else token  # Remove "Bearer" if included in token
         authentication = jwt.decode(

@@ -1,0 +1,168 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+    margin: 20px;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.messages {
+    border: 1px solid #ddd;
+    padding: 5px;
+    height: 700px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+}
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+#message-input {
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#send-btn {
+    width: 15%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#send-btn:hover {
+    background-color: #45a049;
+}
+
+p {
+    margin-bottom: 10px;
+    font-family: "Courier New", Courier, monospace;
+    color: #555;
+}
+
+pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+/* Custom Card */
+.custom-card {
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-card-body {
+    padding: 20px;
+}
+
+/* Hover effect for card */
+.custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom List */
+.custom-list {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.custom-list-item {
+    padding: 5px;
+    font-size: 1rem;
+    color: #555;
+    transition: background-color 0.3s ease;
+}
+
+.custom-list-item:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* Tags Style */
+.tags {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* Text Colors */
+.text-warning {
+    color: #f39c12;
+}
+
+.text-primary {
+    color: #007bff;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.text-info {
+    color: #17a2b8;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+/* Optional: History Section styling */
+.custom-list-item strong {
+    font-size: 1.2rem;
+    color: #007bff;
+}
+
+.custom-card-body h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}

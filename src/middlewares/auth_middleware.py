@@ -17,7 +17,7 @@ except FileNotFoundError:
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path in ["/docs", "/redoc", "/openapi.json"]:
+        if request.url.path.startswith("/static") or request.url.path in ["/docs", "/redoc", "/openapi.json", "/"]:
             return await call_next(request)
 
         token = request.headers.get("Authorization")

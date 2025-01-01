@@ -77,7 +77,7 @@ async def typeAheadSearchHandler(websocket: WebSocket):
     
     """WebSocket endpoint for the game, handling real-time communication."""
     await websocket.accept()
-    print(f"New user is connected !!!")
+    print(f"New user is connected !!")
     
     #! Autheticate user 
     try:
@@ -96,10 +96,13 @@ async def typeAheadSearchHandler(websocket: WebSocket):
             try:
                 data   = await websocket.receive_json()
                 prefix = data.get("prefix")
-                print(f"Search term -  {prefix} is recieved from {userId}")
+                print(f"Search term -  `{prefix}` is recieved from {userId}")
                 
                 #! Rate limit here and check ES
-                #! ...
+                
+                #! Get search results now
+                
+                
                 response = await getSearchResults(prefix=prefix, userId = userId)
                 await websocket.send_json(data = response)
             
