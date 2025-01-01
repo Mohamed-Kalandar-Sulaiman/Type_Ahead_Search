@@ -58,3 +58,6 @@ Thumbs.db
 *.swp
 *.swo
 *.tmp
+
+
+app.log
