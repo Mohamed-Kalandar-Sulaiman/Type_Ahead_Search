@@ -40,7 +40,7 @@ app.include_router(api)
 
 app.add_middleware(CorsMiddleware)
 app.add_middleware(LoggingMiddleware)
-# app.add_middleware(AuthMiddleware)
+app.add_middleware(AuthMiddleware)
 
 # Mount static files (for CSS/JS)
 app.mount("/static", StaticFiles(directory="src/static"), name="static")

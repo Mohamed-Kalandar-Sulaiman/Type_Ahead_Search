@@ -29,7 +29,7 @@ async def LogHistory(request:Request, prefix ):
         id             = ulid.ulid()
         date           = datetime.datetime.now()
         formatted_date = date.strftime("%Y-%m-%dT%H:%M:%S") + 'Z'
-        await history_repo.create_new_search_history(id=id, prefix=prefix, date=formatted_date, user_id = request.state.user)
+        await history_repo.create_new_search_history(id=id, prefix=prefix, date=formatted_date, user_id = request.state.userId)
     except Exception as e:
         #! On failure Write into queue
         print(e)
@@ -46,10 +46,12 @@ async def staticSearchHandler(request:Request):
     request_payload      = await request.json()
     request_query_params = dict(request.query_params)
     prefix               = request_payload.get("prefix")
-    
+    print(f"Static search request recieved {prefix}")
+
+    userId = request.state.userId
     
     #! Fetch data
-    response = history_repo.search_latest_history(userId=None)
+    response = await history_repo.search_latest_history(userId=userId)
     #! Write into history cluster and analytics service topic
     asyncio.create_task(LogHistory(request=request, prefix=prefix))
     asyncio.create_task(AnalyticsService(prefix))

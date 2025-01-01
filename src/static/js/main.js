@@ -120,4 +120,29 @@ document.addEventListener("DOMContentLoaded", () => {
             socket.send(JSON.stringify(jsonMessage)); 
         }
     });
+
+
+    sendButton.addEventListener("click", ()=>{
+        const message = messageInput.value;
+        const url = 'http://localhost:80/api/v1/search';  // REST API URL
+   
+        const jsonMessage = { "prefix": message }; 
+      
+        fetch(url, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': jwt,  
+            },
+            body: JSON.stringify(jsonMessage),  
+        })
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+            console.log("Response:", data);  // Handle the response data here
+        })
+        .catch(error => {
+            console.error('Error:', error);  // Handle any error that occurs
+        });
+
+    })
 });

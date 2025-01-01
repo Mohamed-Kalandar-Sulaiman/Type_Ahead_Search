@@ -32,7 +32,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                                     algorithms = [ALGORITHM],
                                     options    = {"verify_aud": False, "verify_iss": False}
                                 )
-            request.state.user = payload.get("sub")
+            request.state.userId = payload.get("sub")
 
         except ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="Token has expired")
