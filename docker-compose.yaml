@@ -47,6 +47,17 @@ services:
     volumes:
       - kibana_data:/usr/share/kibana/data  
   
+  redis:
+    image: redis:6.2
+    container_name: redis
+    ports:
+      - "6379:6379"  # Redis default port
+    networks:
+      - es-net
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]  # Enable AOF persistence
+  
   search_service:
     build:
       context: .
@@ -58,6 +69,7 @@ services:
       - "80:80"  # Expose FastAPI app on port 8000
     depends_on:
       - elasticsearch
+      - redis
     networks:
       - es-net
     command: ["./run.sh"] 
